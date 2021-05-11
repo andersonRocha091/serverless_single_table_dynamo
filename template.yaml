@@ -11,6 +11,10 @@ Globals:
     Timeout: 3
 
 Resources:
+  API:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: dev
 
   DynamoDBTable:
     Type: AWS::DynamoDB::Table
@@ -29,11 +33,30 @@ Resources:
       ProvisionedThroughput:
         ReadCapacityUnits: 1
         WriteCapacityUnits: 1
+    
+  AddNewProperty:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./src
+      Handler: app.addNewProperty
+      Runtime: nodejs12.x
+      Policies:
+        - DynamoIOCrudPolicy:
+            TableName: PropertiesTableGSI
+      Environment:
+        Variables:
+          TABLE_NAME: PropertiesTableGSI
+      Events:
+        HelloApi:
+          Type: Api
+          Properties:
+            Method: POST
+            Path: /property
 
   HelloWorldFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
-      CodeUri: hello-world/
+      CodeUri: src/
       Handler: app.lambdaHandler
       Runtime: nodejs12.x
       Events:
