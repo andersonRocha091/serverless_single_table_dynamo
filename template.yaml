@@ -50,6 +50,7 @@ Resources:
         HelloApi:
           Type: Api
           Properties:
+            RestApiId: !Ref API
             Method: POST
             Path: /property
 
