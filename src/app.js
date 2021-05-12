@@ -2,13 +2,33 @@
 // const url = 'http://checkip.amazonaws.com/';
 
 let response;
-const dynbamodbManager = require('./dynamoDbManager');
+const dynamodbManager = require('./dynamoDbManager');
 const propertyManager = require('./propertyManager');
 
+exports.getProperty = async event => {
+    console.log('getProperty');
+    const primaryKey = event.queryStringParameters.propertyId;
+    const sortKey = "property";
+    const propertyFromDynamoDb = await dynamodbManager.getItem(primaryKey,sortKey);
+    const property = propertyManager.cleanUpProperty(propertyFromDynamoDb);
+
+    return {
+        statusCode: 200,
+        body: JSON.stringify(property),
+        headers: {}
+    }
+}
 exports.addNewProperty = async event => {
-    console.log('addNewProperty');
+    console.log(event);
     const propertyDetails = JSON.parse(event.body);
-    const propertyRecordToSave
+    const propertyRecordToSave = propertyManager.createPropertyRecordToSave(propertyDetails);
+    const result = await dynamodbManager.saveItem(propertyRecordToSave);
+    console.log("RESULT: ", JSON.stringify(result));
+    return {
+        statusCode: 200,
+        body: JSON.stringify(result),
+        headers:{}
+    }
 }
 
 exports.lambdaHandler = async (event, context) => {
