@@ -18,6 +18,21 @@ exports.getProperty = async event => {
         headers: {}
     }
 }
+
+exports.bookProperty = async event => {
+    console.log('bookProperty');
+    const { userId, propertyId, startBookingDate, endBookingDate } = event.queryStringParameters
+    const booking = { userId, propertyId, startBookingDate, endBookingDate };
+    const bookingRecordToSave = propertyManager.createBookRecordToSave(booking);
+    const result = await dynamodbManager.saveItem(bookingRecordToSave);
+
+    return {
+        statusCode: 200,
+        body: JSON.stringify(result),
+        headers:{}
+    }
+}
+
 exports.addNewProperty = async event => {
     console.log(event);
     const propertyDetails = JSON.parse(event.body);

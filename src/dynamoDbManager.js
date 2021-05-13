@@ -6,7 +6,19 @@ const dynamo = new AWS.DynamoDB.DocumentClient({
 const TABLE_NAME = process.env.TABLE_NAME;
 
 module.exports.getItem = async (propertyId, sortKey) => {
-  
+  console.log('getItem');
+  const params={
+    Key:{
+      propertyId: propertyId,
+      sortKey: sortKey
+    },
+    TableName: TABLE_NAME
+  }
+  console.log(params);
+  return dynamo.get(params).promise().then((result) => {
+    console.log('RESULT: ', result);
+    return result.Item;
+  })
 }
 
 
