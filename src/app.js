@@ -19,6 +19,19 @@ exports.getProperty = async event => {
     }
 }
 
+exports.getBookedDatesProperty = async event => {
+    console.log('getBookedDatesProperty');
+    const propertyId = event.queryStringParameters.propertyId;
+    const bookedPropertyFromDynamoDb = await dynamodbManager.queryTable(propertyId,'propertyId')
+    const bookedDates = propertyManager.cleanUpBookingResults(bookedPropertyFromDynamoDb);
+
+    return {
+        statusCode: 200,
+        body: JSON.stringify(bookedDates),
+        headers: {}
+    }
+}
+
 exports.bookProperty = async event => {
     console.log('bookProperty');
     const { userId, propertyId, startBookingDate, endBookingDate } = event.queryStringParameters

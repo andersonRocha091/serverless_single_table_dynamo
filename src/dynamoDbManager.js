@@ -21,6 +21,19 @@ module.exports.getItem = async (propertyId, sortKey) => {
   })
 }
 
+module.exports.queryTable = async (propertyId) => {
+  const params = {
+    TableName: TABLE_NAME,
+    KeyConditionExpression: 'propertyId = :HpropertyId',
+    ExpressionAttributeValues:{
+      ':HpropertyId':propertyId
+    }
+  };
+  return dynamo.query(params).promise().then( result => {
+    return result.Items;
+  })
+}
+
 
 module.exports.saveItem = async item => {
   // console.log('TABLE_NAME: ', TABLE_NAME);
