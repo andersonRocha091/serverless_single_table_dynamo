@@ -17,6 +17,25 @@ module.exports.cleanUpProperty = propertyFromDynamo => {
   }
 }
 
+module.exports.cleanUpBookingResults = bookingFromDynamo => {
+  return bookingFromDynamo.map(booking => {
+    return this.cleanUpBooking(booking);
+  })
+}
+
+module.exports.cleanUpBooking = bookingFromDynamo => {
+  if((bookingFromDynamo.sortKey == undefined) || (bookingFromDynamo.sortKey !== 'property')){
+    console.log('a');
+    console.log(bookingFromDynamo);
+    return {
+      userId: bookingFromDynamo.userId,
+      propertyId: bookingFromDynamo.propertyId,
+      startBookingDate: bookingFromDynamo.startBookingDate,
+      endBookingDate: bookingFromDynamo.endBookingDate
+    }
+  }
+}
+
 module.exports.createBookRecordToSave = bookingDetails => {
   bookingDetails.propertyId = bookingDetails.propertyId;
   bookingDetails.sortKey = bookingDetails.startBookingDate;
