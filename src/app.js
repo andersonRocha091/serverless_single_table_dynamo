@@ -19,6 +19,22 @@ exports.getProperty = async event => {
     }
 }
 
+exports.searchByLocation = async event => {
+    console.log('Search by location');
+
+    const {country, city} = event.queryStringParameters
+    const primaryKey = `${country}_${city}`;
+    const propertiesFromDynamoDB = await dynamodbManager.queryIndex(primaryKey,'country_city');
+    const properties = propertyManager.cleanUpPropertyResults(propertiesFromDynamoDB);
+
+    return {
+        statusCode: 200,
+        body: JSON.stringify(properties),
+        headers:{}
+    }
+
+}
+
 exports.getBookedDatesProperty = async event => {
     console.log('getBookedDatesProperty');
     const propertyId = event.queryStringParameters.propertyId;
