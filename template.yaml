@@ -47,7 +47,27 @@ Resources:
           ProvisionedThroughput:
             ReadCapacityUnits: 1
             WriteCapacityUnits: 1
-              
+
+  SearchPropertyByLocation:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./src
+      Handler: app.searchPropertiesByLocation
+      Runtime: nodejs12.x 
+       Policies:
+        - DynamoIOCrudPolicy:
+            TableName: PropertiesTableGSI
+      Environment:
+        Variables:
+          TABLE_NAME: PropertiesTableGSI
+          INDEX_NAME: Properties_GSI1
+      Events:
+        HelloApi:
+          Type: Api
+          Properties:
+            RestApiId: !Ref API
+            Method: GET
+            Path: /search
     
   AddNewProperty:
     Type: AWS::Serverless::Function
