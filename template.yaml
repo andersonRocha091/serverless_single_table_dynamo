@@ -25,6 +25,8 @@ Resources:
           AttributeType: S
         - AttributeName: sortKey
           AttributeType: S
+        - AttributeName: country_city
+          AttributeType: S
       KeySchema:
         - AttributeName: propertyId
           KeyType: HASH
@@ -33,6 +35,19 @@ Resources:
       ProvisionedThroughput:
         ReadCapacityUnits: 1
         WriteCapacityUnits: 1
+      GlobalSecondaryIndexes:
+        - IndexName: Properties_GSI1
+          KeySchema:
+            - AttributeName: country_city
+              KeyType: HASH
+            - AttributeName: propertyId
+              KeyType: RANGE
+          Projection:
+            NonKeyAttributes: [ownerId, title, description, city, country]
+          ProvisionedThroughput:
+            ReadCapacityUnits: 1
+            WriteCapacityUnits: 1
+              
     
   AddNewProperty:
     Type: AWS::Serverless::Function
