@@ -4,6 +4,7 @@ const dynamo = new AWS.DynamoDB.DocumentClient({
 });
 
 const TABLE_NAME = process.env.TABLE_NAME;
+const INDEX_NAME = process.env.INDEX_NAME;
 
 module.exports.getItem = async (propertyId, sortKey) => {
   console.log('getItem');
@@ -34,7 +35,19 @@ module.exports.queryTable = async (propertyId) => {
   })
 }
 
-
+module.exports.queryByIndex = async (primaryKey, primaryKeyName) => {
+  const params = {
+    TableName: TABLE_NAME,
+    IndexName: INDEX_NAME,
+    KeyConditionExpression: `${primaryKeyName} = :HprimaryKey`,
+    ExpressionAttributeValues:{
+      ':HprimaryKey':primaryKey
+    }
+  }
+  return dynamo.query(params).promise().then(result => {
+    return result.Items;
+  });
+}
 module.exports.saveItem = async item => {
   // console.log('TABLE_NAME: ', TABLE_NAME);
   const params = {
