@@ -24,8 +24,8 @@ exports.searchByLocation = async event => {
 
     const {country, city} = event.queryStringParameters
     const primaryKey = `${country}_${city}`;
-    const propertiesFromDynamoDB = await dynamodbManager.queryIndex(primaryKey,'country_city');
-    const properties = propertyManager.cleanUpPropertyResults(propertiesFromDynamoDB);
+    const propertiesFromDynamoDB = await dynamodbManager.queryByIndex(primaryKey,'country_city');
+    const properties = propertyManager.cleanUpPropertyByResults(propertiesFromDynamoDB);
 
     return {
         statusCode: 200,

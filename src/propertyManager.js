@@ -17,6 +17,12 @@ module.exports.cleanUpProperty = propertyFromDynamo => {
   }
 }
 
+module.exports.cleanUpPropertyByResults = propertiesFromDynamoDB => {
+  return propertiesFromDynamoDB.map(property => {
+    return this.cleanUpProperty(property);
+  })
+}
+
 module.exports.cleanUpBookingResults = bookingFromDynamo => {
   return bookingFromDynamo.map(booking => {
     return this.cleanUpBooking(booking);

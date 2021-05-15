@@ -47,14 +47,26 @@ Resources:
           ProvisionedThroughput:
             ReadCapacityUnits: 1
             WriteCapacityUnits: 1
+        - IndexName: Properties_GSI2
+          KeySchema:
+            - AttributeName: userId
+              KeyType: HASH
+            - AttributeName: startBookingDate
+              KeyType: RANGE
+          Projection:
+            NonKeyAttributes: [propertyId, endBookingDate]
+            ProjectionType: INCLUDE
+          ProvisionedThroughput:
+            ReadCapacityUnits: 1
+            WriteCapacityUnits: 1
 
   SearchPropertyByLocation:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: ./src
-      Handler: app.searchPropertiesByLocation
+      Handler: app.searchByLocation
       Runtime: nodejs12.x 
-       Policies:
+      Policies:
         - DynamoIOCrudPolicy:
             TableName: PropertiesTableGSI
       Environment:
