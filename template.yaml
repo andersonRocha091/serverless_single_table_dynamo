@@ -27,6 +27,10 @@ Resources:
           AttributeType: S
         - AttributeName: country_city
           AttributeType: S
+        - AttributeName: startBookingDate
+          AttributeType: S
+        - AttributeName: userId
+          AttributeType: S
       KeySchema:
         - AttributeName: propertyId
           KeyType: HASH
