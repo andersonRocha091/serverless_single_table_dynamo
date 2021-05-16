@@ -160,6 +160,27 @@ Resources:
             RestApiId: !Ref API
             Method: GET
             Path: /propertyDates
+  
+  GetBookedPropertiesForUsers:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./src
+      Handler: app.getBookedPropertiesForUsers
+      Runtime: nodejs12.x
+      Policies:
+        - DynamoIOCrudPolicy:
+            TableName: PropertiesTableGSI
+      Environment:
+        Variables:
+          TABLE_NAME: PropertiesTableGSI
+          INDEX_NAME: Properties_GSI2
+      Events:
+        HelloApi:
+          Type: Api
+          Properties:
+            RestApiId: !Ref API
+            Method: GET
+            Path: /propertyByUser
 
   HelloWorldFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
