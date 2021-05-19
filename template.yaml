@@ -64,6 +64,7 @@ Resources:
             ReadCapacityUnits: 1
             WriteCapacityUnits: 1
 
+
   SearchPropertyByLocation:
     Type: AWS::Serverless::Function
     Properties:
@@ -84,7 +85,28 @@ Resources:
             RestApiId: !Ref API
             Method: GET
             Path: /search
-    
+  
+  GetAllPropertiesByOwner:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./src
+      Handler: app.getPropertiesByOwner
+      Runtime: nodejs12.x
+      Policies:
+        - DynamoIOCrudPolicy:
+            TableName: PropertiesTableGSI
+      Environment:
+        Variables:
+          TABLE_NAME: PropertiesTableGSI
+          INDEX_NAME: Properties_GSI3
+      Events:
+        HelloApi:
+          Type: Api
+          Properties:
+            RestApiId: !Ref API
+            Method: GET
+            Path: /properties
+        
   AddNewProperty:
     Type: AWS::Serverless::Function
     Properties:
