@@ -7,6 +7,7 @@ aws \
    AttributeName=country_city,AttributeType=S \
    AttributeName=userId,AttributeType=S \
    AttributeName=startBookingDate,AttributeType=S \
+   AttributeName=ownerId,AttributeType=S \
   --key-schema \
    AttributeName=propertyId,KeyType=HASH \
    AttributeName=sortKey,KeyType=RANGE \
@@ -31,6 +32,15 @@ aws \
             \"Projection\":{
                 \"ProjectionType\":\"INCLUDE\",
                 \"NonKeyAttributes\":[\"propertyId\",\"endBookingDate\"]
+            }
+        },
+        {
+            \"IndexName\": \"Properties_GSI3\",
+            \"KeySchema\": [{\"AttributeName\":\"ownerId\",\"KeyType\":\"HASH\"},
+                            {\"AttributeName\":\"propertyId\",\"KeyType\":\"RANGE\"}],
+            \"Projection\":{
+                \"ProjectionType\":\"INCLUDE\",
+                \"NonKeyAttributes\":[\"title\",\"descrition\",\"city\",\"country\"]
             }
         }
     ]"
